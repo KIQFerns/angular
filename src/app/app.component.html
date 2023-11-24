@@ -1,0 +1,55 @@
+<main>
+  <section class="content">
+    <div class="d-flex justify-content-center">
+      <p style="width: 45%;text-align: left;">Your temporary E-mail Address</p>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="input-group mb-3" style="width: 45%;">
+        <input type="text" class="form-control" placeholder="temporary e-mail" aria-label="temporary e-mail"
+          aria-describedby="basic-addon2" value="{{tempMail}}" #EmailValue />
+        <span class="btn btn-outline-info input-group-text" id="basic-addon2" (click)="ClipBoardCopy(EmailValue)"><i
+            style="margin-right: .3rem;" class="bi bi-copy"></i>Copy</span>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <p style="text-align: left;">Autorefresh in </p>
+      <countdown #cd [config]="{leftTime:15, format: 's'}" />
+      <button type="button"
+        style="--bs-btn-padding-x: 0.3rem;--bs-btn-padding-y: 0.1rem;height: max-content;margin-right: .3rem;"
+        class="btn btn-outline-success btn-floating rounded-circle" (click)="generateMessages()">
+        <i style="font-size: 0.9rem;" class="bi bi-arrow-clockwise"></i>
+      </button>
+      <p style="text-align: left;">Refresh</p>
+    </div>
+    <div class="row border " style="border-color: #ebebeb;">
+      <div class="col-3 border  border-right-0" style="border-color: #ebebeb;">
+        <div style="width: 18rem;padding-left: 1rem;padding-top: 0.7rem;">
+          <p>Inbox</p>
+        </div>
+      </div>
+      <div class="col-9 border " style="background-color:#f2f2f2;border-color: #ebebeb;">
+      </div>
+    </div>
+    <div class="row border " style="border-color: #ebebeb;     min-height: 100vh;
+    height: 100%;">
+      <div class="col-3" style="padding-right: 0;">
+        <div *ngFor="let message of messages">
+          <div class="card" style="width: auto;" (click)="showText(message?.headerSubject!, message?.text!)">
+            <div class="card-body">
+              <h5 class="card-title">{{message?.headerSubject}}</h5>
+              <p class="card-text">{{(message?.text!).substr(0,15) + '...' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-9" style="background-color:#f2f2f2;" *ng-if="mainTitle != ''">
+        <div class="card" style="width: auto;">
+          <div class="card-body">
+            <h5 class="card-title">{{mainTitle}}</h5>
+            <p class="card-text">{{mainMessage}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
