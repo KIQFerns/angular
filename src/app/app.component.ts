@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { CountdownModule } from 'ngx-countdown';
+import { CountdownModule, CountdownComponent } from 'ngx-countdown';
 import { MailService } from './mail.service';
 import { Isession } from './Isession';
 
@@ -14,6 +14,8 @@ import { Isession } from './Isession';
 })
 
 export class AppComponent implements OnInit {
+  @ViewChild('cd') private countdownComponent!: CountdownComponent;
+  tempoTotal = 15; // tempo total em segundos
   mainTitle = ""
   mainMessage = ""
 
@@ -38,6 +40,21 @@ export class AppComponent implements OnInit {
   generateMessages() {
     this.mailService.generateMessages()
       .subscribe(mail => this.messages = mail?.data?.session?.mails)
+
+    this.countdownComponent.restart();
+  }
+
+  intervalId: ReturnType<typeof setInterval> = setInterval(() => {
+    this.mailService.generateMessages()
+      .subscribe(mail => this.messages = mail?.data?.session?.mails)
+  }, 15000);
+
+  onCountdownEvent(event: any): void {
+    if (event.action === 'done') {
+
+      // A contagem regressiva chegou a zero, reinicie-a
+      this.countdownComponent.restart();
+    }
   }
 
   ClipBoardCopy(input: any) {
@@ -46,7 +63,7 @@ export class AppComponent implements OnInit {
     input.selectRange(0, 0)
   }
 
-  showText(title:string, message:string) {
+  showText(title: string, message: string) {
     this.mainTitle = title;
     this.mainMessage = message;
   }
